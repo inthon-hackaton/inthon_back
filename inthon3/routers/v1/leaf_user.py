@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Query
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Query, Form
 from sqlalchemy.orm import Session
 from models.leaf_models import LeafUser, Picture
 from config.database import get_db
@@ -22,8 +22,8 @@ S3_BUCKET_NAME="leaf-bucket"
 
 @router.post("/create-info")
 async def create_user_info(
-    nickname: Optional[str] = Query(None, description="New nickname for the user"),
-    description: Optional[str] = Query(None, description="New description for the user"),
+    nickname: Optional[str] = Form(None, description="New nickname for the user"),
+    description: Optional[str] = Form(None, description="New description for the user"),
     profile_picture: Optional[UploadFile] = File(...),
     db: Session = Depends(get_db),
     current_user: dict = Depends(get_current_user)
@@ -78,8 +78,8 @@ async def create_user_info(
 
 @router.post("/update-info")
 async def update_user_info(
-    nickname: Optional[str] = Query(None, description="New nickname for the user"),
-    description: Optional[str] = Query(None, description="New description for the user"),
+    nickname: Optional[str] = Form(None, description="New nickname for the user"),
+    description: Optional[str] = Form(None, description="New description for the user"),
     profile_picture: Optional[UploadFile] = File(None, description="New profile picture"),
     db: Session = Depends(get_db),
     current_user: dict = Depends(get_current_user)
