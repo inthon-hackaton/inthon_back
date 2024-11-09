@@ -9,9 +9,17 @@ on:
     # 여러개 적어도 된다.
 
 env:
-  DOCKER_IMAGE: ghcr.io/euizzang8001/myproject
+  DOCKER_IMAGE: ${{secrets.DOCKER_IMAGE}}
   VERSION: ${{ github.sha }}
   NAME: newproject
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  DB_DATABASE: ${{ secrets.DB_DATABASE }}
+  DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+  DB_PORT: ${{ secrets.DB_PORT }}
+  DB_SERVER: ${{ secrets.DB_SERVER }}
+  DB_USERNAME: ${{ secrets.DB_USERNAME }}
+  DEV_ENV: ${{ secrets.DEV_ENV }}
   # Docker image 를 ghcr.io 에 올릴 때 우리의github이름/이미지이름 으로 저장한다. 이미지이름을 정해주면 된다.
   # Docker image 의 이름을 newproject 이라고 해놓은 것. 이름 뭐할지 정하면 된다.
 
