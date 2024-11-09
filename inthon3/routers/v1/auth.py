@@ -69,8 +69,8 @@ def validate_token(oi_token: str) -> dict:
         raise HTTPException(status_code=400, detail="Invalid token issuer")
     if payload['exp'] < datetime.now().timestamp():
         raise HTTPException(status_code=400, detail="Token has expired")
-    if payload['aud'] != GOOGLE_CLIENT_ID:
-        raise HTTPException(status_code=400, detail="Invalid token audience")
+    # if payload['aud'] != GOOGLE_CLIENT_ID:
+    #     raise HTTPException(status_code=400, detail="Invalid token audience")
 
     # JWK (공개 키)로 서명 검증
     jwk_data = get_google_public_key(header['kid'])
