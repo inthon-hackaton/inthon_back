@@ -66,5 +66,7 @@ jobs:
       
       - name: Docker run
         run: |
-          docker stop ${{ env.NAME }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latest
+          docker ps -a | grep ${{ env.NAME }} && docker stop ${{ env.NAME }} || echo "No container to stop"
+          docker ps -a | grep ${{ env.NAME }} && docker rm ${{ env.NAME }} || echo "No container to remove"
+          docker images -q ${{ env.DOCKER_IMAGE }} && docker rmi ${{ env.DOCKER_IMAGE }}:latest || echo "No image to remove"
           docker run -d -p 8000:8000 --name myproject --restart always ${{ env.DOCKER_IMAGE }}:latest

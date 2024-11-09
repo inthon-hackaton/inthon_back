@@ -7,7 +7,7 @@ from schemas.draft_schema import DraftOutput, DraftList
 from dotenv import load_dotenv
 import os
 import boto3
-from models.leaf_models import Picture, Draft, LeafUser
+from models.leaf_models import Picture, Draft, LeafUser, Piece
 from datetime import datetime 
 import uuid
 from io import BytesIO
@@ -31,13 +31,42 @@ router = APIRouter(
     tags=["draft"]
 )
 
-# @router.get("/draft-list", response_model=DraftList)
-# async def get_draft_list(
-#     offset:int,
-#     limit:int,
-#     db: Session = Depends(get_db)
-# ):
-#     return await service.get_draft_list(offset=offset, limit=limit)
+@router.get("/draft-list", response_model=DraftList)
+async def get_draft_list(
+    offset:int,
+    limit:int,
+    db: Session = Depends(get_db)
+):
+    
+    draft_list = db.query(Draft).offset(offset).limit(limit).all()
+
+    response_draft_list = []
+
+    
+    for draft in draft_list:
+        image_info = db.query(Picture).filter(Picture.picture_id == draft.picture_id).first()
+        draft_used_count = db.query(Piece).filter(Piece.draft_id == image_info.draft_id).count()
+        example_user_picute_id_list = db.query(Piece).filter(Piece.draft_id == image_info.draft_id).limit(3).all()
+        user_picture_id_list = [
+            db.query(LeafUser).filter(LeafUser.user_id == example_user_picture_id[0]).first()
+            for example_user_picture_id in example_user_picute_id_list
+        ]
+
+        draft_dict = {
+            "draft_id": draft.draft_id,
+            "description": draft.description,  
+            "draft_link": image_info.picture_link, 
+            "draft_used_count": draft_used_count,
+            "draft_user_list": [
+                db.query(Picture).filter(Picture.picture_id == user_picture_id.picture_id).first()
+                for user_picture_id in user_picture_id_list if user_picture_id is not None
+            ]
+        }
+        
+        response_draft_list.append(draft_dict)
+        print(response_draft_list)
+
+    return response_draft_list
 
 @router.post("/create", response_model=None)
 async def create_draft(
