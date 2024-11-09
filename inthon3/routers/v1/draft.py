@@ -2,7 +2,7 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
 from sqlalchemy.orm import Session
 from config.database import get_db
-from schemas.draft_schema import DraftOutput, DraftList
+from schemas.draft_schema import DraftOutput, DraftList, HomeDraft
 # from services.draft_service import DraftService
 from dotenv import load_dotenv
 import os
@@ -31,7 +31,7 @@ router = APIRouter(
     tags=["draft"]
 )
 
-@router.get("/draft-list", response_model=DraftList)
+@router.get("/draft-list", response_model=List[HomeDraft])
 async def get_draft_list(
     offset:int,
     limit:int,
@@ -45,8 +45,8 @@ async def get_draft_list(
     
     for draft in draft_list:
         image_info = db.query(Picture).filter(Picture.picture_id == draft.picture_id).first()
-        draft_used_count = db.query(Piece).filter(Piece.draft_id == image_info.draft_id).count()
-        example_user_picute_id_list = db.query(Piece).filter(Piece.draft_id == image_info.draft_id).limit(3).all()
+        draft_used_count = db.query(Piece).filter(Piece.picture_id == image_info.picture_id).count()
+        example_user_picute_id_list = db.query(Piece).filter(Piece.picture_id == image_info.picture_id).limit(3).all()
         user_picture_id_list = [
             db.query(LeafUser).filter(LeafUser.user_id == example_user_picture_id[0]).first()
             for example_user_picture_id in example_user_picute_id_list

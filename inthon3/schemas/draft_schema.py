@@ -21,15 +21,8 @@ class DraftOutput(BaseModel):
         orm_mode = True
 
 class HomeDraft(BaseModel):
-    draft_id: int
-    picture_id: int
-    description: str
-    class Config:
-        orm_mode = True 
-
-class HomeDraft(BaseModel):
     draft_link: str
-    draft_user_list: List[DraftLeafUser]
+    draft_user_list: List[Optional[DraftLeafUser]]
     description : Optional[str]
     draft_used_count: int
     draft_id: int
