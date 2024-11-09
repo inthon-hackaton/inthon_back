@@ -65,10 +65,10 @@ def validate_token(oi_token: str) -> dict:
     payload = json.loads(base64.urlsafe_b64decode(payload + '=' * (4 - len(payload) % 4)))
 
     # 페이로드 유효성 검증
-    if payload['iss'] not in GOOGLE_ISSUERS:
-        raise HTTPException(status_code=400, detail="Invalid token issuer")
-    if payload['exp'] < datetime.now().timestamp():
-        raise HTTPException(status_code=400, detail="Token has expired")
+    #if payload['iss'] not in GOOGLE_ISSUERS:
+    #    raise HTTPException(status_code=400, detail="Invalid token issuer")
+    #if payload['exp'] < datetime.now().timestamp():
+    #    raise HTTPException(status_code=400, detail="Token has expired")
     # if payload['aud'] != GOOGLE_CLIENT_ID:
     #     raise HTTPException(status_code=400, detail="Invalid token audience")
 
