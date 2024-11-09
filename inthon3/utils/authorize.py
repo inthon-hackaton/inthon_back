@@ -5,7 +5,8 @@ import jwt  # PyJWT 사용
 from jwt import PyJWTError
 
 # 환경변수에서 JWT 비밀 키 및 알고리즘 가져오기
-JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "leaf_jwt_secret")
+#JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+JWT_SECRET_KEY = "leaf_jwt_secret"
 JWT_ALGORITHM = "HS256"
 
 # HTTPBearer 인스턴스 생성 (토큰 추출)
