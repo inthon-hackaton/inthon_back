@@ -1,6 +1,6 @@
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, aliased
 from config.database import get_db
 from schemas.draft_schema import DraftOutput, DraftList, HomeDraft
 # from services.draft_service import DraftService
@@ -11,7 +11,7 @@ from models.leaf_models import Picture, Draft, LeafUser, Piece
 from datetime import datetime 
 import uuid
 from io import BytesIO
-
+from pydantic import BaseModel
 
 load_dotenv()
 
@@ -96,3 +96,52 @@ async def create_draft(
     db.refresh(new_draft)
 
     return {"status" : "success"}
+
+# 응답 모델 정의
+class PieceInfo(BaseModel):
+    piece_id: int
+    picture_link: str
+    nickname: str
+    profile_picture_link: Optional[str] = None
+
+@router.get("/draft-piece-list", response_model=List[PieceInfo])
+async def get_draft_piece_list(
+    draft_id: int,
+    db: Session = Depends(get_db)
+):
+    # 존재하는 draft_id인지 확인
+    if not db.query(Piece).filter(Piece.draft_id == draft_id).first():
+        raise HTTPException(status_code=404, detail="Draft not found")
+
+    # Picture 테이블에 대한 별칭 생성
+    PiecePicture = aliased(Picture)
+    UserPicture = aliased(Picture)
+
+    # 쿼리 작성
+    pieces = (
+        db.query(
+            Piece.piece_id,
+            PiecePicture.picture_link.label('piece_picture_link'),
+            LeafUser.nickname,
+            UserPicture.picture_link.label('user_picture_link')
+        )
+        .join(PiecePicture, Piece.picture_id == PiecePicture.picture_id)
+        .join(LeafUser, Piece.user_id == LeafUser.user_id)
+        .outerjoin(UserPicture, LeafUser.picture_id == UserPicture.picture_id)
+        .filter(Piece.draft_id == draft_id)
+        .all()
+    )
+
+    # 응답 데이터 구성
+    result = [
+        PieceInfo(
+            piece_id=piece.piece_id,
+            picture_link=piece.piece_picture_link,
+            nickname=piece.nickname,
+            profile_picture_link=piece.user_picture_link
+        )
+        for piece in pieces
+    ]
+
+    return result
+    
