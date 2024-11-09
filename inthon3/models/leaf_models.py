@@ -55,7 +55,7 @@ class Completion(Base):
     completion_id = Column(Integer, primary_key=True, index=True)
 
     user_id = Column(Integer, ForeignKey("leaf_user.user_id"))
-    picture_id = Column(Integer, ForeignKey("picture.picture_id"))
+    created_at = Column(DateTime, default=current_timestamp())
 
 class Includes(Base):
     __tablename__ = "includes"
