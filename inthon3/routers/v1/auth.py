@@ -10,7 +10,6 @@ from models.leaf_models import LeafUser
 from datetime import datetime, timedelta
 import os
 from pydantic import BaseModel
-from jwt import algorithms
 
 router = APIRouter(
     prefix="/auth",
@@ -61,42 +60,26 @@ async def verify_token(request: TokenRequest, db: Session = Depends(get_db)):
     }
 
 def validate_token(oi_token: str) -> dict:
-    # 헤더와 페이로드 추출 및 디코딩
-    header, payload, _ = oi_token.split('.')
-    header = json.loads(base64.urlsafe_b64decode(header + '=' * (4 - len(header) % 4)))
-    payload = json.loads(base64.urlsafe_b64decode(payload + '=' * (4 - len(payload) % 4)))
+    from jwt import PyJWKClient
 
-    # 페이로드 유효성 검증
-    #if payload['iss'] not in GOOGLE_ISSUERS:
-    #    raise HTTPException(status_code=400, detail="Invalid token issuer")
-    #if payload['exp'] < datetime.now().timestamp():
-    #    raise HTTPException(status_code=400, detail="Token has expired")
-    # if payload['aud'] != GOOGLE_CLIENT_ID:
-    #     raise HTTPException(status_code=400, detail="Invalid token audience")
-
-    # JWK (공개 키)로 서명 검증
-    jwk_data = get_google_public_key(header['kid'])
-    key = algorithms.Algorithm.from_jwk(json.dumps(jwk_data))
     try:
-        decoded = jwt.decode(oi_token, key=key, algorithms=['RS256'], audience=GOOGLE_CLIENT_ID)
+        # PyJWKClient를 사용하여 키 가져오기
+        jwks_client = PyJWKClient(GOOGLE_KEYS_URL)
+        signing_key = jwks_client.get_signing_key_from_jwt(oi_token)
+
+        # 토큰 디코딩 및 검증
+        decoded = jwt.decode(
+            oi_token,
+            key=signing_key.key,
+            algorithms=['RS256'],
+            audience=GOOGLE_CLIENT_ID,
+            issuer="https://accounts.google.com"
+        )
         return decoded
-    except jwt.ExpiredSignatureError as e :
-        print(e)
+    except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=400, detail="Token signature has expired")
     except jwt.InvalidTokenError as e:
-        print(e)
-        raise HTTPException(status_code=400, detail="Invalid token signature")
-
-
-def get_google_public_key(kid: str) -> dict:
-    # Google의 공개 키를 가져와서 키 ID가 일치하는 키를 반환
-    response = requests.get(GOOGLE_KEYS_URL)
-    response.raise_for_status()
-    keys = response.json().get("keys", [])
-    for key in keys:
-        if key["kid"] == kid:
-            return key
-    raise HTTPException(status_code=400, detail="Invalid token key ID")
+        raise HTTPException(status_code=400, detail=f"Invalid token signature: {str(e)}")
 
 # JWT 생성 함수
 def create_jwt_token(user_id: int) -> str:
