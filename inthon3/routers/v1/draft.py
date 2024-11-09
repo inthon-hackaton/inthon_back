@@ -54,7 +54,6 @@ async def get_draft_list(
 
         draft_dict = {
             "draft_id": draft.draft_id,
-            "description": draft.description,  
             "draft_link": image_info.picture_link, 
             "draft_used_count": draft_used_count,
             "draft_user_list": [

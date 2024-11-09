@@ -23,9 +23,9 @@ class DraftOutput(BaseModel):
 class HomeDraft(BaseModel):
     draft_link: str
     draft_user_list: List[Optional[DraftLeafUser]]
-    description : Optional[str]
     draft_used_count: int
     draft_id: int
+    
     class Config:
         orm_mode = True 
 
