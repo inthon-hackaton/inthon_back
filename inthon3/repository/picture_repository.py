@@ -6,15 +6,15 @@ from models.leaf_models import Picture
 from schemas.picture_schema import PictureInput, PictureOutput
 
 class PictureRepository:
-    def __init__(self, db: Session = Depends(get_db)) -> None:
+    def __init__(self, db: Session = get_db) -> None:
         self.db = db
 
     def get_picture(self, picture_id: int) -> Optional[PictureOutput]:
         picture = self.db.query(Picture).filter(Picture.picture_id == picture_id).first()
         return PictureOutput.from_orm(picture) if picture else None
 
-    def create_picture(self, picture_link: str) -> PictureOutput:
-        new_picture = Picture(picture_link=picture_link)
+    def create_picture(self, picture_link: str, picture_id: str):
+        new_picture = Picture(picture_link = picture_link, picture_id = picture_id)
         self.db.add(new_picture)
         self.db.commit()
         self.db.refresh(new_picture)
