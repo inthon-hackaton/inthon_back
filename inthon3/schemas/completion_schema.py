@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+from typing import List
 
 class CompletionInput(BaseModel):
     user_id: int
@@ -11,3 +12,6 @@ class CompletionOutput(BaseModel):
 
     class Config:
         orm_mode = True
+
+class CompletionCreateInput(BaseModel):
+    piece_ids: List[int]
