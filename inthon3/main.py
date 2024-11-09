@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from config.database import create_tables
-from routers import routers_sample
+from routers import api
 
 # SWAGGER_HEADERS = {
 #     "title": "",
@@ -22,7 +22,7 @@ app = FastAPI()
 async def root():
     return {"message": "FastAPI app is up and running!"}
 
-app.include_router(routers_sample.router)
+app.include_router(api.router)
 
 origins = ["*"]
 
