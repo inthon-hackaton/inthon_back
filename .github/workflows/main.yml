@@ -1,17 +1,13 @@
 name: Deploy with Docker
-# 내가 만드는 이름이다 뭐든 상관없다
 
 on:
   push:
     branches: [ main ]
-    # 무슨 브랜치가 업데이트 될 때 Actions 를 작동시킬지 적는다.
-    # develop 브랜치로 개발하며 완료되면 main 에 머지해 Actions 를 작동시키면 조금 더 안전하겠지.
-    # 여러개 적어도 된다.
 
 env:
   DOCKER_IMAGE: ${{secrets.DOCKER_IMAGE}}
   VERSION: ${{ github.sha }}
-  NAME: newproject
+  NAME: myproject
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   DB_DATABASE: ${{ secrets.DB_DATABASE }}
@@ -20,8 +16,6 @@ env:
   DB_SERVER: ${{ secrets.DB_SERVER }}
   DB_USERNAME: ${{ secrets.DB_USERNAME }}
   DEV_ENV: ${{ secrets.DEV_ENV }}
-  # Docker image 를 ghcr.io 에 올릴 때 우리의github이름/이미지이름 으로 저장한다. 이미지이름을 정해주면 된다.
-  # Docker image 의 이름을 newproject 이라고 해놓은 것. 이름 뭐할지 정하면 된다.
 
 jobs:
   build:
@@ -48,8 +42,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_TOKEN }}
-          # 우리가 방금 복사해서 setting secrets 에 붙여줬던 token 이다. 이름을 기억해 넣어주자.
-          # 우리의 ghcr.io 에 접근하기 위함이다.
         
       - name: Build and push
         id: docker_build
@@ -62,7 +54,8 @@ jobs:
   deploy:
     needs: build
     name: Deploy
-    runs-on: [self-hosted, label-superman]
+    runs-on: [ self-hosted, label-superman ]
+    # label-newproject 라는 이름으로 AWS EC2 가 Runner 를 작동시킬 때 사용했던 그 label
     steps:
       - name: Login to ghcr
         uses: docker/login-action@v1
@@ -70,14 +63,8 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_TOKEN }}
-
+      
       - name: Docker run
         run: |
-          if [ "$(docker ps -q -f name=${{ env.NAME }})" ]; then
-            docker stop ${{ env.NAME }} && docker rm ${{ env.NAME }}
-          fi
-          docker rmi ${{ env.DOCKER_IMAGE }}:latest || true  # Will ignore error if image doesn't exist
-          docker run -d -p 8000:8000 --name ${{ env.NAME }} --restart unless-stopped ${{ env.DOCKER_IMAGE }}:latest
-        env:
-          NAME: newproject
-          DOCKER_IMAGE: ${{ env.DOCKER_IMAGE }}
+          docker stop ${{ env.NAME }} && docker rm ${{ env.NAME }} && docker rmi ${{ env.DOCKER_IMAGE }}:latest
+          docker run -d -p 8000:8000 --name myproject --restart always ${{ env.DOCKER_IMAGE }}:latest
