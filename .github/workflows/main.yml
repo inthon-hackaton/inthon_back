@@ -16,6 +16,12 @@ env:
   DB_SERVER: ${{ secrets.DB_SERVER }}
   DB_USERNAME: ${{ secrets.DB_USERNAME }}
   DEV_ENV: ${{ secrets.DEV_ENV }}
+  PYTHONPATH : ${{secrets.PYTHONPATH}}
+
+  S3_BUCKET_NAME : ${{secrets.S3_BUCKET_NAME}}
+
+  JWT_SECRET_KEY : ${{secrets.JWT_SECRET_KEY}}
+  GOOGLE_CLIENT_ID: ${{secrets.GOOGLE_CLIENT_ID}}
 
 jobs:
   build:
@@ -73,4 +79,8 @@ jobs:
             -e DB_SERVER=${{ secrets.DB_SERVER }} \
             -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
             -e DEV_ENV=${{ secrets.DEV_ENV }} \
+            -e PYTHONPATH=${{ secrets.PYTHONPATH }} \
+            -e S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }} \
+            -e JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }} \
+            -e GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} \
             ${{ env.DOCKER_IMAGE }}:latest
