@@ -9,6 +9,9 @@ class PieceInput(BaseModel):
     picture_id: int
     description: Optional[str] = None
 
+    class Config:
+        orm_mode = True 
+
 class PieceOutput(BaseModel):
     piece_id: int
     user_id: int

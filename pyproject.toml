@@ -15,6 +15,7 @@ pillow = "^11.0.0"
 python-multipart = "^0.0.17"
 boto3 = "^1.35.57"
 python-dotenv = "^1.0.1"
+psycopg2 = "^2.9.10"
 
 
 [build-system]
