@@ -6,7 +6,7 @@ import requests
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.orm import Session
 from config.database import get_db
-from models.leaf_models import User
+from models.leaf_models import LeafUser
 from datetime import datetime, timedelta
 import os
 from pydantic import BaseModel
@@ -41,10 +41,10 @@ async def verify_token(request: TokenRequest, db: Session = Depends(get_db)):
     oauth_id = payload['sub']
 
     # DB에서 사용자 조회 또는 신규 사용자 생성
-    user = db.query(User).filter(User.oauth_id == oauth_id).first()
+    user = db.query(LeafUser).filter(LeafUser.oauth_id == oauth_id).first()
     if not user:
         print("신규 사용자입니다. 회원가입 처리")
-        user = User(oauth_id=oauth_id, nickname="temp_user")
+        user = LeafUser(oauth_id=oauth_id, nickname="temp_user")
         db.add(user)
         db.commit()
         db.refresh(user)

@@ -12,7 +12,6 @@ router = APIRouter(
 
 router.include_router(draft.router)
 
-router.include_router(picture.router)
 router.include_router(auth.router)
 
 
