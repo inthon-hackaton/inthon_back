@@ -790,7 +790,7 @@ files = [
     {file = "protobuf-5.28.3.tar.gz", hash = "sha256:64badbc49180a5e401f373f9ce7ab1d18b63f7dd4a9cdc43c92b9f0b481cef7b"},
 ]
 
-[[package]]
+
 name = "psycopg2"
 version = "2.9.10"
 description = "psycopg2 - Python-PostgreSQL Database Adapter"
@@ -809,6 +809,7 @@ files = [
 ]
 
 [[package]]
+
 name = "pyasn1"
 version = "0.6.1"
 description = "Pure-Python implementation of ASN.1 types and DER/BER/CER codecs (X.208)"
@@ -1303,3 +1304,4 @@ standard = ["colorama (>=0.4)", "httptools (>=0.5.0)", "python-dotenv (>=0.13)",
 lock-version = "2.0"
 python-versions = "^3.12"
 content-hash = "edae6f6fd312cfe33a3656dddc61356d5d66c671af2a00b419e25c4454c2c8af"
+
