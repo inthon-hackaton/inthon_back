@@ -13,20 +13,17 @@ db_port = os.getenv("DB_PORT")
 db_username = os.getenv('DB_USERNAME')
 db_password = os.getenv("DB_PASSWORD")
 
+print(db_port)
 # PostgreSQL 데이터베이스 URL 설정
 SQLALCHEMY_DATABASE_URL = f"postgresql://{db_username}:{db_password}@{db_server}:5432/{db_database}"
 
 # 엔진 생성
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL
-)
-
-# 세션 로컬 설정
-SessionLocal = sessionmaker(
-    autocommit=False,
-    autoflush=False,
-    bind=engine,
-)
+try:
+    engine = create_engine(SQLALCHEMY_DATABASE_URL)
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    print("Database connection successful.")
+except Exception as e:
+    print(f"Error connecting to the database: {e}")
 
 # Base 모델 선언
 Base = declarative_base()
