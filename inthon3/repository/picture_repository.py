@@ -13,8 +13,8 @@ class PictureRepository:
         picture = self.db.query(Picture).filter(Picture.picture_id == picture_id).first()
         return PictureOutput.from_orm(picture) if picture else None
 
-    def create_picture(self, picture_link: str) -> PictureOutput:
-        new_picture = Picture(picture_link=picture_link)
+    def create_picture(self, picture_link: str, picture_id: str) -> PictureOutput:
+        new_picture = Picture(picture_link=picture_link, picture_id=picture_id)
         self.db.add(new_picture)
         self.db.commit()
         self.db.refresh(new_picture)

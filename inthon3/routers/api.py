@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import Optional
-from routers.v1 import picture, auth
+from routers.v1 import picture, auth, piece, likes, completion, leaf_user
 
 router = APIRouter(
     prefix="/api/v1",
@@ -10,6 +10,10 @@ router = APIRouter(
 
 router.include_router(picture.router)
 router.include_router(auth.router)
+router.include_router(piece.router)
+router.include_router(likes.router)
+router.include_router(completion.router)
+router.include_router(leaf_user.router)
 
 @router.get("/")
 async def read_root():
