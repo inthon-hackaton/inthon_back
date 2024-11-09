@@ -56,17 +56,6 @@ async def create_draft(
 
     file_url = f"https://{S3_BUCKET_NAME}.s3.amazonaws.com/{s3_key}"
 
-    new_user = LeafUser(
-        oauth_id=1,
-        nickname="의찬",
-        description="의찬",
-        picture_id=uuid.UUID("7ca5ce5a-a8bf-4c01-9d33-4a6287c6550a")
-    )
-    
-    db.add(new_user)
-    db.commit()
-    db.refresh(new_user)
-
     new_picture = Picture(picture_link = file_url, picture_id = id)
     db.add(new_picture)
     db.commit()
