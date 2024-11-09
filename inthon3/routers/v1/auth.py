@@ -74,7 +74,7 @@ def validate_token(oi_token: str) -> dict:
 
     # JWK (공개 키)로 서명 검증
     jwk_data = get_google_public_key(header['kid'])
-    key = algorithms.RSAAlgorithm.from_jwk(json.dumps(jwk_data))
+    key = algorithms.Algorithm.from_jwk(json.dumps(jwk_data))
     try:
         decoded = jwt.decode(oi_token, key=key, algorithms=['RS256'], audience=GOOGLE_CLIENT_ID)
         return decoded
