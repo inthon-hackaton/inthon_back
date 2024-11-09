@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Create .env
-        run: echo "${{ secrets.DEV_ENV }}" > ./leaf/.env
+        run: echo "${{ secrets.DEV_ENV }}" > ./inthon3/.env
 
       - name: Test
         run: echo "${{ secrets.DEV_ENV }}"
