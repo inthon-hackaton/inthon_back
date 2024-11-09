@@ -18,6 +18,8 @@ AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME")
 
+S3_BUCKET_NAME="leaf-bucket"
+
 @router.post("/create-info")
 async def create_user_info(
     nickname: Optional[str] = Query(None, description="New nickname for the user"),
@@ -121,14 +123,16 @@ async def update_user_info(
         db.add(new_picture)
         db.commit()
         db.refresh(new_picture)
-
+        
         # 사용자 프로필 사진 업데이트
         user.picture_id = new_picture.picture_id
 
     # DB에 변경 사항 커밋
     db.commit()
+    db.refresh(user)
 
     return {
+        "user_id": user.user_id,
         "nickname": user.nickname,
         "description": user.description,
         "picture_url": file_url if profile_picture else None
