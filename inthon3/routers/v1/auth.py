@@ -17,13 +17,15 @@ router = APIRouter(
     tags=["auth"]
 )
 
-JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
+JWT_SECRET_KEY = "leaf_jwt_secret"
+#JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRATION_MINUTES = 60
 
 GOOGLE_ISSUERS = ["https://accounts.google.com", "accounts.google.com"]
 GOOGLE_KEYS_URL = "https://www.googleapis.com/oauth2/v3/certs"
-GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_ID = "1067111695591-isu83qg3jtf69qlvabqj8ktafd3ngdje.apps.googleusercontent.com"
+#GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 
 class TokenRequest(BaseModel):
     oi_token: str
@@ -78,9 +80,11 @@ def validate_token(oi_token: str) -> dict:
     try:
         decoded = jwt.decode(oi_token, key=key, algorithms=['RS256'], audience=GOOGLE_CLIENT_ID)
         return decoded
-    except jwt.ExpiredSignatureError:
+    except jwt.ExpiredSignatureError as e :
+        print(e)
         raise HTTPException(status_code=400, detail="Token signature has expired")
-    except jwt.InvalidTokenError:
+    except jwt.InvalidTokenError as e:
+        print(e)
         raise HTTPException(status_code=400, detail="Invalid token signature")
 
 

@@ -7,16 +7,16 @@ from dotenv import load_dotenv
 load_dotenv(verbose=True)
 
 # 환경 변수로부터 PostgreSQL 접속 정보 가져오기
-db_server = os.getenv('DB_SERVER')
-db_database = os.getenv('DB_DATABASE')
+db_server = os.getenv('DB_SERVER', "leaf-postgres.c5ec4esecfuq.ap-northeast-2.rds.amazonaws.com")
+db_database = os.getenv('DB_DATABASE', "")
 db_port = os.getenv("DB_PORT")
 db_username = os.getenv('DB_USERNAME')
 db_password = os.getenv("DB_PASSWORD")
 
 print(db_port)
 # PostgreSQL 데이터베이스 URL 설정
-SQLALCHEMY_DATABASE_URL = f"postgresql://{db_username}:{db_password}@{db_server}:5432/{db_database}"
-
+#SQLALCHEMY_DATABASE_URL = f"postgresql://{db_username}:{db_password}@{db_server}:5432/{db_database}"
+SQLALCHEMY_DATABASE_URL = f"postgresql://leaf_postgres:leafleaf241109@leaf-postgres.c5ec4esecfuq.ap-northeast-2.rds.amazonaws.com:5432/leaf"
 # 엔진 생성
 try:
     engine = create_engine(SQLALCHEMY_DATABASE_URL)
