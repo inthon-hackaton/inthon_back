@@ -14,7 +14,7 @@ db_username = os.getenv('DB_USERNAME')
 db_password = os.getenv("DB_PASSWORD")
 
 # PostgreSQL 데이터베이스 URL 설정
-SQLALCHEMY_DATABASE_URL = f"postgresql://{db_username}:{db_password}@{db_server}:{db_port}/{db_database}"
+SQLALCHEMY_DATABASE_URL = f"postgresql://{db_username}:{db_password}@{db_server}:5432/{db_database}"
 
 # 엔진 생성
 engine = create_engine(
