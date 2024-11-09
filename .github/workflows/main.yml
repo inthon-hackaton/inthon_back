@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 env:
-  DOCKER_IMAGE: ghcr.io/euizzang8001/myproject  # Use your Docker Hub username and repository name
+  DOCKER_IMAGE: ghcr.io/euizzang8001/inthon_back  # Use your Docker Hub username and repository name
   VERSION: ${{ github.sha }}
   NAME: myproject
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
