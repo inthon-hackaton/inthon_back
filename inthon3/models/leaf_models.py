@@ -6,12 +6,6 @@ from config.database import Base
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
 
-# class Leaf_User(Base):
-#     __tablename__ = "leaf_user"
-
-#     user_id = Column(Integer, primary_key = True, index = True)
-#     nickname = Column(String, unique = True)
-
 class LeafUser(Base):
     __tablename__ = "leaf_user"
 
