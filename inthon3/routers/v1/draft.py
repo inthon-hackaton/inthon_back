@@ -122,6 +122,7 @@ async def get_draft_piece_list(
     pieces = (
         db.query(
             Piece.piece_id,
+            Piece.piece_number,  # piece_number 추가
             PiecePicture.picture_link.label('piece_picture_link'),
             LeafUser.nickname,
             UserPicture.picture_link.label('user_picture_link')
