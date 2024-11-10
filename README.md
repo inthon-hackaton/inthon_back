@@ -82,9 +82,21 @@ async def verify_token(request: TokenRequest, db: Session = Depends(get_db)):
 
 ## 팀원 소개
 
-| 팀원 | 역할 | 소개 |
-|------|------|------|
-| ![민준](https://example.com/photo2.png) | **김민준** | 모바일 앱 개발 |
-| ![다영](https://example.com/photo1.png) | **최다영** | 모바일 앱 개발 |
-| ![의찬](https://example.com/photo3.png) | **박의찬** | 백엔드 개발 |
-| ![준희](https://example.com/photo3.png) | **한준희** | 백엔드 개발 |
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/25a80d8b-c81c-4889-ac1d-18981739e84a" width="30" height="30" alt="민준"> <strong>김민준</strong></td>
+    <td>모바일 앱 개발</td>
+  </tr>
+  <tr>
+    <td><img src="https://avatars.githubusercontent.com/u/80742780?v=4" width="30" height="30" alt="다영"> <strong>최다영</strong></td>
+    <td>모바일 앱 개발</td>
+  </tr>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/62ee7cd2-993c-476a-b16c-e018b2d047c9" width="30" height="30" alt="의찬"> <strong>박의찬</strong></td>
+    <td>백엔드 개발</td>
+  </tr>
+  <tr>
+    <td><img src="https://avatars.githubusercontent.com/u/115782193?s=256&v=4" width="30" height="30" alt="준희"> <strong>한준희</strong></td>
+    <td>백엔드 개발</td>
+  </tr>
+</table>
