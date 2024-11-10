@@ -19,7 +19,7 @@ router = APIRouter(
 JWT_SECRET_KEY = "leaf_jwt_secret"
 #JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY")
 JWT_ALGORITHM = "HS256"
-JWT_EXPIRATION_MINUTES = 60
+JWT_EXPIRATION_MINUTES = 3600
 
 GOOGLE_ISSUERS = ["https://accounts.google.com", "accounts.google.com"]
 GOOGLE_KEYS_URL = "https://www.googleapis.com/oauth2/v3/certs"
