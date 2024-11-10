@@ -9,6 +9,7 @@ import uuid
 import boto3
 import os
 from typing import Optional
+from pydantic import BaseModel
 
 router = APIRouter(
     prefix="/piece",
@@ -19,7 +20,10 @@ AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
 AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 S3_BUCKET_NAME = os.getenv("S3_BUCKET_NAME")
 
-@router.post("/create", response_model=PieceOutput)
+class PieceCreateInfo(BaseModel):
+    piece_id: int
+
+@router.post("/create", response_model=PieceCreateInfo)
 async def create_piece(
     piece_number: int,
     description: Optional[str] | None,
@@ -67,10 +71,7 @@ async def create_piece(
     db.refresh(new_piece)
 
     return {
-        "piece_id": new_piece.piece_id,
-        "piece_number": new_piece.piece_number,
-        "description": new_piece.description,
-        "picture_link": new_picture.picture_link
+        "piece_id": new_piece.piece_id
     }
 
 
