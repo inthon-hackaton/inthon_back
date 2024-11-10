@@ -66,7 +66,12 @@ async def create_piece(
     db.commit()
     db.refresh(new_piece)
 
-    return new_piece
+    return {
+        "piece_id": new_piece.piece_id,
+        "piece_number": new_piece.piece_number,
+        "description": new_piece.description,
+        "picture_link": new_picture.picture_link
+    }
 
 
 @router.get("/user-stats")

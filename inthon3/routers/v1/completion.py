@@ -20,10 +20,11 @@ class PieceInfo(BaseModel):
 
 class CompletionResponse(BaseModel):
     completion_id: int
+    user_id: int
     created_at: datetime
     pieces: List[PieceInfo]
 
-@router.post("/create")
+@router.post("/create", response_model=CompletionResponse)
 async def create_completion(
     completion_data: CompletionCreateInput,
     db: Session = Depends(get_db),
