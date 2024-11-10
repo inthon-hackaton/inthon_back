@@ -101,6 +101,7 @@ async def create_draft(
 class PieceInfo(BaseModel):
     piece_id: int
     picture_link: str
+    piece_number: int
     nickname: str
     profile_picture_link: Optional[str] = None
 
@@ -137,6 +138,7 @@ async def get_draft_piece_list(
         PieceInfo(
             piece_id=piece.piece_id,
             picture_link=piece.piece_picture_link,
+            piece_number=piece.piece_number,
             nickname=piece.nickname,
             profile_picture_link=piece.user_picture_link
         )
