@@ -117,6 +117,7 @@ async def get_user_completion_list(
         # 각 completion의 결과에 포함된 piece 배열 추가
         result.append({
             "completion_id": completion.completion_id,
+            "user_id": completion.user_id,
             "created_at": completion.created_at,
             "pieces": piece_data,
         })
