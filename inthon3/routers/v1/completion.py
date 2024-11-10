@@ -122,6 +122,6 @@ async def get_user_completion_list(
             "pieces": piece_data,
         })
 
-    result = sorted(result, reverse=True)
+    result = result[::-1]
 
     return result
