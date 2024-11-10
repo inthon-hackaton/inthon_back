@@ -4,7 +4,6 @@ from routers.v1 import picture, draft, auth, piece, likes, completion, leaf_user
 
 router = APIRouter(
     prefix="/api/v1",
-    tags=["sample"],
     responses={404: {"description": "Not Found"}},
 )
 
