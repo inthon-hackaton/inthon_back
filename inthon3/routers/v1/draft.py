@@ -110,10 +110,7 @@ async def get_draft_piece_list(
     draft_id: int,
     db: Session = Depends(get_db)
 ):
-    # 존재하는 draft_id인지 확인
-    if not db.query(Piece).filter(Piece.draft_id == draft_id).first():
-        raise HTTPException(status_code=404, detail="Draft not found")
-
+    
     # Picture 테이블에 대한 별칭 생성
     PiecePicture = aliased(Picture)
     UserPicture = aliased(Picture)
