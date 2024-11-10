@@ -40,6 +40,8 @@ async def create_completion(
     db.commit()
     db.refresh(new_completion)
 
+    pieces_info = []  # PieceInfo 객체들을 저장할 리스트
+
     for piece_id in completion_data.piece_ids:
         # 각 piece_id가 실제로 존재하는지 확인
         piece = db.query(Piece).filter_by(piece_id=piece_id).first()
@@ -55,13 +57,28 @@ async def create_completion(
         )
         db.add(new_include)
 
+        # PieceInfo 객체 생성
+        piece_picture = db.query(Picture).filter_by(picture_id=piece.picture_id).first()
+        if not piece_picture:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Picture for Piece with ID {piece_id} not found."
+            )
+
+        piece_info = PieceInfo(
+            piece_id=piece.piece_id,
+            piece_number=piece.piece_number,
+            picture_link=piece_picture.picture_link
+        )
+        pieces_info.append(piece_info)
+
     db.commit()
 
     return {
         "completion_id": new_completion.completion_id,
         "user_id": user_id,
         "created_at": new_completion.created_at,
-        "included_pieces": completion_data.piece_ids
+        "pieces": pieces_info
     }
 
 @router.get("/user-list", response_model=List[CompletionResponse])

@@ -121,10 +121,10 @@ async def get_draft_piece_list(
     # 쿼리 작성
     pieces = (
         db.query(
-            Piece.piece_id,
-            Piece.piece_number,  # piece_number 추가
+            Piece.piece_id.label('piece_id'),
+            Piece.piece_number.label('piece_number'),
             PiecePicture.picture_link.label('piece_picture_link'),
-            LeafUser.nickname,
+            LeafUser.nickname.label('nickname'),
             UserPicture.picture_link.label('user_picture_link')
         )
         .join(PiecePicture, Piece.picture_id == PiecePicture.picture_id)
@@ -147,4 +147,5 @@ async def get_draft_piece_list(
     ]
 
     return result
+
     
