@@ -40,7 +40,7 @@ async def create_piece(
         aws_access_key_id=AWS_ACCESS_KEY_ID,
         aws_secret_access_key=AWS_SECRET_ACCESS_KEY
     )
-    _uuid = str(uuid.uuid4())  # UUID를 문자열로 변환
+    _uuid = uuid.uuid4()  # UUID를 문자열로 변환
     unique_filename = f"{_uuid}_{picture.filename}"
     s3_key = f"uploads/pictures/{unique_filename}"
 
